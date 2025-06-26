@@ -17,7 +17,7 @@ public class Coneksi {
     public static Connection konek() {
         
         try {
-            String url = "jbdc:mysql://localhost:3306/alumni_nai202457201056";
+            String url = "jdbc:mysql://localhost:3306/alumni_nai202457201056";
             String user = "root";
             String pass = "";
             

@@ -166,7 +166,7 @@ public class loginFram extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Username/Passwoard Salah");
                 }
             } catch (SQLException sQLException) {
-                JOptionPane.showMessageDialog(null, sQLException.getMessage());
+                System.out.println(sQLException);
             } 
         } else {
             JOptionPane.showMessageDialog(this, "Username/Password Tidak Boleh Kosong");
