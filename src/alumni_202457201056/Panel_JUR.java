@@ -3,6 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package alumni_202457201056;
+import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -15,6 +24,36 @@ public class Panel_JUR extends javax.swing.JPanel {
      */
     public Panel_JUR() {
         initComponents();
+        reset();
+        load_table_jurusan();
+    }
+    void reset (){
+        tfKodeJur.setText(null);
+        tfKodeJur.setEditable(true);
+        tfNamaJur.setText(null);
+    }
+    void load_table_jurusan(){
+        try {
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Kode Jurusan");
+            model.addColumn("Nama Jurusan");
+
+            String sql = "SELECT * FROM jurusan";
+            Connection conn = Coneksi.konek();
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                String kodeJurusan = rs.getString("kode_jur");
+                String namaJurusan = rs.getString("nama_jurusan");
+                Object[] baris = {kodeJurusan, namaJurusan};
+                model.addRow(baris);
+
+            }Ttable.setModel(model);
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Gagal mengambil data!");
+            
+        }
+        
     }
 
     /**
@@ -100,6 +139,11 @@ public class Panel_JUR extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Ttable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TtableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Ttable);
 
         Btambah.setBackground(new java.awt.Color(0, 153, 51));
@@ -219,20 +263,65 @@ public class Panel_JUR extends javax.swing.JPanel {
 
     private void BtambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtambahActionPerformed
         // TODO add your handling code here:
+        String kodeJurusan = tfKodeJur.getText();
+        String namaJurusan = tfNamaJur.getText();
+        String sql = "INSERT INTO jurusan(kode_jur, nama_jurusan) VALUES(?,?)";
+        
+        try {
+            Connection conn = Coneksi.konek();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, kodeJurusan);
+            ps.setString(2, namaJurusan);
+            ps.execute();
+            JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Data gagal disimpan!");
+        } 
+        load_table_jurusan();
+        reset(); 
     }//GEN-LAST:event_BtambahActionPerformed
 
     private void jBubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBubahActionPerformed
         // TODO add your handling code here:
+        String kodeJurusan = tfKodeJur.getText();
+        String namaJurusan = tfNamaJur.getText();
+        String sql = "UPDATE jurusan SET nama_jurusan=? WHERE kode_jur=?";
+        
+        try {
+            Connection conn = Coneksi.konek();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, namaJurusan);
+            ps.setString(2, kodeJurusan);
+            ps.execute();
+            JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Data gagal disimpan!");
+        } 
+        load_table_jurusan();
+        reset(); 
     }//GEN-LAST:event_jBubahActionPerformed
 
     private void jBhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBhapusActionPerformed
         // TODO add your handling code here:
+        String kodeJurusan = tfKodeJur.getText();
+        String sql = "DELETE FROM jurusan WHERE kode_jur=?";
+        
+        try {
+            Connection conn = Coneksi.konek();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, kodeJurusan);
+            ps.execute();
+            JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Data gagal disimpan!");
+        } 
+        load_table_jurusan();
+        reset(); 
     }//GEN-LAST:event_jBhapusActionPerformed
 
     private void jBresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBresetActionPerformed
         // TODO add your handling code here:
-       tfKodeJur.setText("");
-       tfNamaJur.setText("");
+        reset();
        
         
     }//GEN-LAST:event_jBresetActionPerformed
@@ -241,6 +330,16 @@ public class Panel_JUR extends javax.swing.JPanel {
         // TODO add your handling code here:
         ContenJurusan.setVisible(false);
     }//GEN-LAST:event_BcrosActionPerformed
+
+    private void TtableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TtableMouseClicked
+        // TODO add your handling code here:
+        int barisYangDipilih = Ttable.rowAtPoint(evt.getPoint());
+        String kodeJurusan = Ttable.getValueAt(barisYangDipilih,0).toString();
+        String namaJurusan = Ttable.getValueAt(barisYangDipilih, 1).toString();
+        tfKodeJur.setText(kodeJurusan);
+        tfKodeJur.setEditable(false);
+        tfNamaJur.setText(namaJurusan);
+    }//GEN-LAST:event_TtableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

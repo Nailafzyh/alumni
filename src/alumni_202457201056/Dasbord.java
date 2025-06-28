@@ -122,7 +122,7 @@ public class Dasbord extends javax.swing.JFrame {
         jButton6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/alumni_202457201056/icons8-about-20.png"))); // NOI18N
-        jButton6.setText("Abaout");
+        jButton6.setText("About");
         jButton6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jButton6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 

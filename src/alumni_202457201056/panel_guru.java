@@ -3,6 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package alumni_202457201056;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,6 +23,37 @@ public class panel_guru extends javax.swing.JPanel {
     public panel_guru() {
         initComponents();
     }
+  void reset() {
+      jTnip.setText(null);
+      jTnip.setEditable(true);
+      jTnama.setText(null);
+      jCjeniskel.setSelectedItem(null);
+      jTAlamt.setText(null);
+  }
+  void load_tabel_guru(){
+      DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("NIP");
+            model.addColumn("Nama Guru");
+            model.addColumn("L/P");
+            model.addColumn("Alamat");
+            String sql = "SELECT * FROM guru";
+            try {
+          Connection conn = Coneksi.konek();
+          Statement st = conn.createStatement();
+          ResultSet rs = st.executeQuery(sql);
+          while (rs.next()) {
+              String NIP = rs.getString("NIP");
+              String namaGuru = rs.getString("nama_guru");
+              String jenisKelamin = rs.getString("gender");
+              String alamat = rs.getString("alamat");
+              Object[] baris = {NIP, namaGuru, jenisKelamin, alamat};
+              model.addColumn(baris);
+          }
+      } catch (SQLException sQLException) {
+          JOptionPane.showMessageDialog(null, "Gagal mengambil data!");
+      }
+            jTguru.setModel(model);
+  }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,7 +78,7 @@ public class panel_guru extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTAlamt = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTguru = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -101,7 +139,7 @@ public class panel_guru extends javax.swing.JPanel {
         jTAlamt.setRows(5);
         jScrollPane1.setViewportView(jTAlamt);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTguru.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -112,7 +150,12 @@ public class panel_guru extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jTguru.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTguruMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTguru);
 
         jButton2.setBackground(new java.awt.Color(0, 153, 0));
         jButton2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -251,6 +294,12 @@ public class panel_guru extends javax.swing.JPanel {
         
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jTguruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTguruMouseClicked
+        // TODO add your handling code here:
+        
+        
+    }//GEN-LAST:event_jTguruMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Bicon;
@@ -269,7 +318,7 @@ public class panel_guru extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTAlamt;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTguru;
     private javax.swing.JTextField jTnama;
     private javax.swing.JTextField jTnip;
     // End of variables declaration//GEN-END:variables
